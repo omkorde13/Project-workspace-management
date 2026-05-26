@@ -6,24 +6,23 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "messages")
+@Table(name = "message_receipts")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Message {
+public class MessageReceipt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private Long messageId;
+
+    private String userEmail;
+
     private String status;
-    private Long teamId;
 
-    private String senderEmail;
-
-    @Column(columnDefinition = "TEXT")
-    private String content;
-
-    private LocalDateTime sentAt;
+    private LocalDateTime updatedAt;
 }

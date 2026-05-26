@@ -17,7 +17,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class TeamService {
-
+    private final AuditLogService auditLogService;
     private final TeamRepository teamRepository;
     private final TeamMemberRepository teamMemberRepository;
     private final UserRepository userRepository;
@@ -49,6 +49,11 @@ public class TeamService {
                         .build();
 
         teamMemberRepository.save(adminMember);
+        auditLogService.saveLog(
+                savedTeam.getId(),
+                creatorEmail,
+                "CREATED_TEAM"
+        );
 
         return savedTeam;
     }
@@ -86,6 +91,11 @@ public class TeamService {
                         .build();
 
         teamMemberRepository.save(member);
+        auditLogService.saveLog(
+                teamId,
+                email,
+                "JOINED_TEAM"
+        );
     }
 
     public List<Team> getMyTeams(
@@ -167,6 +177,11 @@ public class TeamService {
         }
 
         teamMemberRepository.delete(member);
+        auditLogService.saveLog(
+                teamId,
+                email,
+                "LEFT_TEAM"
+        );
     }
 
     private TeamMember getAdminMember(
@@ -226,6 +241,11 @@ public class TeamService {
         member.setRole("ADMIN");
 
         teamMemberRepository.save(member);
+        auditLogService.saveLog(
+                teamId,
+                adminEmail,
+                "PROMOTED_MEMBER"
+        );
     }
 
     public void removeMember(
@@ -255,5 +275,10 @@ public class TeamService {
                                         "Member not found"));
 
         teamMemberRepository.delete(member);
+        auditLogService.saveLog(
+                teamId,
+                adminEmail,
+                "REMOVED_MEMBER"
+        );
     }
 }

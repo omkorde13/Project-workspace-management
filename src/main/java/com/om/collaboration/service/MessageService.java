@@ -15,6 +15,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class MessageService {
+    private final MessageReceiptService messageReceiptService;
+    private final AuditLogService auditLogService;
     private final TeamMemberRepository teamMemberRepository;
     private final MessageRepository messageRepository;
     private final TeamRepository teamRepository;
@@ -32,6 +34,25 @@ public class MessageService {
 
         Message saved =
                 messageRepository.save(message);
+        teamMemberRepository
+                .findByTeamId(teamId)
+                .stream()
+                .filter(member ->
+                        !member.getUser()
+                                .getEmail()
+                                .equals(senderEmail))
+                .forEach(member ->
+                        messageReceiptService
+                                .createReceipt(
+                                        saved.getId(),
+                                        member.getUser()
+                                                .getEmail()
+                                ));
+        auditLogService.saveLog(
+                teamId,
+                senderEmail,
+                "SENT_MESSAGE"
+        );
 
         return MessageResponse.builder()
                 .id(saved.getId())

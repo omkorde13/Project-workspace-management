@@ -15,7 +15,8 @@ public interface TeamMemberRepository
             Team team,
             User user
     );
-
+    List<TeamMember> findByTeamId(
+            Long teamId);
     List<TeamMember> findByUser(User user);
     boolean existsByTeamIdAndUserEmail(
             Long teamId,

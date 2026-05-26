@@ -6,24 +6,23 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "messages")
+@Table(name = "audit_logs")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Message {
+public class AuditLog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String status;
+
     private Long teamId;
 
-    private String senderEmail;
+    private String userEmail;
 
-    @Column(columnDefinition = "TEXT")
-    private String content;
+    private String action;
 
-    private LocalDateTime sentAt;
+    private LocalDateTime createdAt;
 }
