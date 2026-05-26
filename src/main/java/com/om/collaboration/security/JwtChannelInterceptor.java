@@ -64,13 +64,22 @@ public class JwtChannelInterceptor
 
         else {
 
-            Object user =
-                    Objects.requireNonNull(accessor.getSessionAttributes())
-                            .get("user");
 
-            if (user instanceof UsernamePasswordAuthenticationToken auth) {
+
+            Object user =
+                    accessor.getSessionAttributes() != null
+                            ? accessor.getSessionAttributes()
+                              .get("user")
+                            : null;
+
+
+
+            if (user instanceof
+                    UsernamePasswordAuthenticationToken auth) {
 
                 accessor.setUser(auth);
+
+
             }
         }
 

@@ -3,6 +3,7 @@ package com.om.collaboration.controller;
 import com.om.collaboration.dto.MessageResponse;
 import com.om.collaboration.service.MessageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,8 +17,12 @@ public class MessageController {
 
     @GetMapping("/{teamId}")
     public List<MessageResponse> getMessages(
-            @PathVariable Long teamId) {
+            @PathVariable Long teamId,
+            Authentication authentication) {
 
-        return messageService.getMessages(teamId);
+        return messageService.getMessages(
+                teamId,
+                authentication.getName()
+        );
     }
 }

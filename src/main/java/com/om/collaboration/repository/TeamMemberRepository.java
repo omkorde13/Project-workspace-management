@@ -17,7 +17,9 @@ public interface TeamMemberRepository
     );
 
     List<TeamMember> findByUser(User user);
-
+    boolean existsByTeamIdAndUserEmail(
+            Long teamId,
+            String email);
     List<TeamMember> findByTeam(Team team);
 
     boolean existsByTeamAndUser(

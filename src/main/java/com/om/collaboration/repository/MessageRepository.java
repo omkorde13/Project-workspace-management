@@ -9,6 +9,5 @@ public interface MessageRepository
         extends JpaRepository<Message, Long> {
 
     List<Message> findByTeamIdOrderBySentAtAsc(
-            Long teamId
-    );
+            Long teamId);
 }

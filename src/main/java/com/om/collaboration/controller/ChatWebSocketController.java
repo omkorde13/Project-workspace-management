@@ -10,6 +10,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 
+import java.util.Map;
+
 @Controller
 @RequiredArgsConstructor
 public class ChatWebSocketController {
@@ -22,23 +24,14 @@ public class ChatWebSocketController {
             ChatMessage chatMessage,
             Message<?> message) {
 
-        Object attributesObj =
-                message.getHeaders()
-                        .get("simpSessionAttributes");
+        Map<String, Object> sessionAttributes =
+                (Map<String, Object>)
+                        message.getHeaders()
+                                .get("simpSessionAttributes");
 
-        if (!(attributesObj instanceof java.util.Map<?, ?> attributes)) {
-            throw new RuntimeException(
-                    "Session attributes not found");
-        }
-
-        Object authObj = attributes.get("user");
-
-        if (!(authObj instanceof
-                UsernamePasswordAuthenticationToken auth)) {
-
-            throw new RuntimeException(
-                    "User not authenticated");
-        }
+        UsernamePasswordAuthenticationToken auth =
+                (UsernamePasswordAuthenticationToken)
+                        sessionAttributes.get("user");
 
         String email = auth.getName();
 
